@@ -1,9 +1,21 @@
-import React,{useEffects} from 'react';///Whenever the site reloads, thats when the useEffect is going to do something to the page
+import React,{useEffect, useState} from 'react';///Whenever the site reloads, thats when the useEffect is going to do something to the page
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios'
 function App() {
+  ///Create a variabel to have the data stored////
+  const[ latest, setLatest] = useState('');
+  useEffect(() => {
+    axios
+    .get('https://corona.lmao.ninja/all')
+    .then(res =>{
+      setLatest(res.data);////Put serLatest as the return resposne and   
+  })
+  .catch(err => {
+    console.log(err)
+  });
+},[]);
   return (
     <div>
       <CardDeck>
@@ -11,7 +23,7 @@ function App() {
     <Card.Body>
       <Card.Title>Cases</Card.Title>
       <Card.Text>
-       100
+       {latest}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
@@ -23,7 +35,7 @@ function App() {
     <Card.Body>
       <Card.Title>Deaths</Card.Title>
       <Card.Text>
-        0
+        {latest}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
@@ -34,7 +46,7 @@ function App() {
     <Card.Body>
       <Card.Title>Success</Card.Title>
       <Card.Text>
-        99
+        {latest}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
