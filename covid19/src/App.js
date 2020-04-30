@@ -2,13 +2,15 @@ import React,{useEffect, useState} from 'react';///Whenever the site reloads, th
 import Card from 'react-bootstrap/Card'
 import CardDeck from 'react-bootstrap/CardDeck'
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 import axios from 'axios'
 function App() {
   ///Create a variabel to have the data stored////
   const[ latest, setLatest] = useState('');
+  
   useEffect(() => {
     axios
-    .get('https://corona.lmao.ninja/all')
+    .get('https://disease.sh/v2/all')
     .then(res =>{
       setLatest(res.data);////Put serLatest as the return resposne and   
   })
@@ -16,6 +18,8 @@ function App() {
     console.log(err)
   });
 },[]);
+const date = new Date(parseInt(latest.updated)); ///Getring the miliseconds from the api///
+const lastUpdated = date.toString(); 
   return (
     <div>
       <CardDeck>
@@ -23,11 +27,11 @@ function App() {
     <Card.Body>
       <Card.Title>Cases</Card.Title>
       <Card.Text>
-       {latest}
+       {latest.cases}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small >Last updated 3 mins ago</small>
+      <small >Last updated {lastUpdated}</small>
     </Card.Footer>
   </Card>
   <Card bg ='danger' text= {'white'} className = 'text-center' style = {{margin: '10px'}}>
@@ -35,22 +39,22 @@ function App() {
     <Card.Body>
       <Card.Title>Deaths</Card.Title>
       <Card.Text>
-        {latest}
+        {latest.deaths}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small>Last updated 3 mins ago</small>
+      <small>Last updated {lastUpdated} </small>
     </Card.Footer>
   </Card>
   <Card bg='success' text={'white'}className = 'text-cneter' style= {{margin: '10px'}}>
     <Card.Body>
-      <Card.Title>Success</Card.Title>
+      <Card.Title>Recovered</Card.Title>
       <Card.Text>
-        {latest}
+        {latest.recovered}
       </Card.Text>
     </Card.Body>
     <Card.Footer>
-      <small >Last updated 3 mins ago</small>
+      <small >Last updated {lastUpdated}</small>
     </Card.Footer>
   </Card>
 </CardDeck>
