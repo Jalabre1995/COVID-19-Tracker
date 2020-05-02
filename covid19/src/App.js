@@ -7,12 +7,17 @@ import axios from 'axios'
 function App() {
   ///Create a variabel to have the data stored////
   const[ latest, setLatest] = useState('');
+  const [results, setResults] = useState([]);
   
   useEffect(() => {
     axios
-    .get('https://disease.sh/v2/all')
-    .then(res =>{
-      setLatest(res.data);////Put serLatest as the return resposne and   
+    .all([
+     axios.get('https://disease.sh/v2/all'), ////caslling all the cases in the US.
+     axios.get('https://disease.sh/v2/countries')////Getting all the countries
+    ])
+    .then(responseArr =>{
+      setLatest(responseArr[0].data);////Put serLatest as the return resposne and   
+      setResults(responseArr[1].data)
   })
   .catch(err => {
     console.log(err)
@@ -20,6 +25,25 @@ function App() {
 },[]);
 const date = new Date(parseInt(latest.updated)); ///Getring the miliseconds from the api///
 const lastUpdated = date.toString(); 
+
+//crete a for loop to get an array of the reuslts for all the countries ////
+
+const countries = results.map(data => {
+  return (
+    <Card
+    bg= 'light'
+    text= 'dark'
+    className = 'text-center'
+    style ={{ margin: '10px'}}
+    >
+      <Card.Body>
+        <Card.Title>{date.country}</Card.Title>
+        <Card.Text>Cases {data.cases}</Card.Text>
+      </Card.Body>
+    </Card>
+  )
+})
+
   return (
     <div>
       <CardDeck>
@@ -58,6 +82,7 @@ const lastUpdated = date.toString();
     </Card.Footer>
   </Card>
 </CardDeck>
+{countries}
     </div>
   );
 }
